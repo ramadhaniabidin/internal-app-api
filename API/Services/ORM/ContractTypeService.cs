@@ -20,7 +20,7 @@ namespace API.Services.ORM
         }
         public async Task<ContractTypeModel?> GetContractTypeById(int id)
         {
-            return await _context.ContractTypes.FindAsync(id);
+            return await _context.ContractTypes.FirstOrDefaultAsync(ct => ct.Id == id);
         }
 
         public async Task CreateContractType (ContractTypeModel contractType)
@@ -32,6 +32,18 @@ namespace API.Services.ORM
         public async Task<ContractTypeModel?> GetByCode(string code)
         {
             return await _context.ContractTypes.FirstOrDefaultAsync(ct => ct.Code == code);
+        }
+
+        public async Task UpdateContractType(ContractTypeModel contractType)
+        {
+            var existing = await _context.ContractTypes.FirstOrDefaultAsync(ct => ct.Id == contractType.Id);
+            if (existing != null)
+            {
+                existing.Title = contractType.Title;
+                existing.Code = contractType.Code;
+                existing.Updated_Date = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<PagedResult<ContractTypeModel>> GetContractTypesPaged(int pageNumber, int pageSize, string? search)
@@ -51,6 +63,16 @@ namespace API.Services.ORM
                 },
                 orderBy: ct => ct.Title
             );
+        }
+
+        public async Task DeleteContractType(int id)
+        {
+            var contractType = await _context.ContractTypes.FirstOrDefaultAsync(b => b.Id == id);
+            if (contractType != null)
+            {
+                contractType.Is_Active = false;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
