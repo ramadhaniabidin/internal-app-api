@@ -3,6 +3,7 @@ using API.Model;
 using API.Services.ORM;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -31,7 +32,7 @@ namespace API.Controllers
                 return BadRequest("Username and password are required.");
             }
 
-            if(user == null || !PasswordHelper.Verify(user.Password, model.Password))
+            if (user == null || !PasswordHelper.Verify(user.Password, model.Password))
             {
                 return Unauthorized("Invalid username or password.");
             }
@@ -42,6 +43,26 @@ namespace API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, model.Username) }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Audience"],
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new { Token = tokenHandler.WriteToken(token) });
+        }
+
+        [HttpPost("token")]
+        public async Task<IActionResult> Token()
+        {
+            string username = _config["AppSettings:APIUsername"] ?? "";
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]!);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, username) }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _config["Jwt:Issuer"],
                 Audience = _config["Jwt:Audience"],
