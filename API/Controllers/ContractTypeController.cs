@@ -43,5 +43,57 @@ namespace API.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetContractTypeById(int id)
+        {
+            var contractType = await service.GetContractTypeById(id);
+            if (contractType == null)
+            {
+                return NotFound($"No branch found with ID: {id}");
+            }
+            return Ok(contractType);
+        }
+
+        [HttpGet("{code}")]
+        public async Task<IActionResult> GetContractTypeByCode(string code)
+        {
+            var branch = await service.GetByCode(code);
+            if (branch == null)
+            {
+                return NotFound($"No branch found with code: {code}");
+            }
+            return Ok(branch);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateContractType([FromBody]ContractTypeModel model)
+        {
+            if (model == null || string.IsNullOrEmpty(model.Code) || string.IsNullOrEmpty(model.Title))
+            {
+                return BadRequest("Contract Type code and name are required.");
+            }
+            var existingBranch = await service.GetByCode(model.Code);
+            if (existingBranch == null)
+            {
+                return NotFound($"No branch found with code: {model.Code}");
+            }
+            model.Id = existingBranch.Id;
+            await service.UpdateContractType(model);
+            return NoContent();
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteContractType(int id)
+        {
+            var contractType = await service.GetContractTypeById(id);
+            if (contractType == null)
+            {
+                return NotFound($"Branch not found");
+            }
+            await service.DeleteContractType(id);
+            return NoContent();
+        }
     }
 }
