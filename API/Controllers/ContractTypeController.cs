@@ -90,7 +90,7 @@ namespace API.Controllers
             var contractType = await service.GetContractTypeById(id);
             if (contractType == null)
             {
-                return NotFound($"Branch not found");
+                return NotFound($"Contract type not found");
             }
             await service.DeleteContractType(id);
             return NoContent();
