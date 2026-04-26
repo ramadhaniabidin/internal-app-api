@@ -3,6 +3,7 @@ using API.Services.ORM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -31,15 +32,13 @@ namespace API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateRole([FromBody] RoleModel role)
         {
-            try
+            var existingRole = await _roleService.GetRoleByIdAsync(role.Id);
+            if (existingRole == null)
             {
-                await _roleService.UpdateRoleAsync(role);
-                return NoContent();
+                return NotFound("Role not found");
             }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            await _roleService.UpdateRoleAsync(role);
+            return NoContent();
         }
     }
 }
