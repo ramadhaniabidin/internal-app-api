@@ -48,18 +48,22 @@ namespace API.Services.ORM
             );
         }
 
+        public async Task<RoleModel?> GetRoleByIdAsync(int id)
+        {
+            return await _context.Roles.FirstOrDefaultAsync(r => r.Id == id && r.IsActive);
+        }
+
         public async Task UpdateRoleAsync(RoleModel role)
         {
             var existingRole = await _context.Roles.FindAsync(role.Id);
-            if (existingRole == null || !existingRole.IsActive)
+            if (existingRole != null)
             {
-                throw new Exception("Role not found");
+                existingRole.Name = role.Name;
+                existingRole.Alias = role.Alias;
+                existingRole.LastUpdatedAt = DateTime.UtcNow;
+                _context.Roles.Update(existingRole);
+                await _context.SaveChangesAsync();
             }
-            existingRole.Name = role.Name;
-            existingRole.Alias = role.Alias;
-            existingRole.LastUpdatedAt = DateTime.UtcNow;
-            _context.Roles.Update(existingRole);
-            await _context.SaveChangesAsync();
         }
     }
 }
