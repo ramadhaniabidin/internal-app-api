@@ -50,7 +50,7 @@ namespace API.Controllers
             var contractType = await service.GetContractTypeById(id);
             if (contractType == null)
             {
-                return NotFound($"No branch found with ID: {id}");
+                return NotFound($"No contract type found with ID: {id}");
             }
             return Ok(contractType);
         }
@@ -61,7 +61,7 @@ namespace API.Controllers
             var branch = await service.GetByCode(code);
             if (branch == null)
             {
-                return NotFound($"No branch found with code: {code}");
+                return NotFound($"No contract type found with code: {code}");
             }
             return Ok(branch);
         }
@@ -76,7 +76,7 @@ namespace API.Controllers
             var existingBranch = await service.GetByCode(model.Code);
             if (existingBranch == null)
             {
-                return NotFound($"No branch found with code: {model.Code}");
+                return NotFound($"No contract type found with code: {model.Code}");
             }
             model.Id = existingBranch.Id;
             await service.UpdateContractType(model);
