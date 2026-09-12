@@ -41,14 +41,14 @@ namespace API.Services.ORM
             {
                 existing.Title = contractType.Title;
                 existing.Code = contractType.Code;
-                existing.Updated_Date = DateTime.UtcNow;
+                existing.UpdatedDate = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
             }
         }
 
         public async Task<PagedResult<ContractTypeModel>> GetContractTypesPaged(int pageNumber, int pageSize, string? search)
         {
-            var query = _context.ContractTypes.Where(ct => ct.Is_Active);
+            var query = _context.ContractTypes.Where(ct => ct.IsActive);
             return await _queryHelper.GetPagedResultAsync(
                 query,
                 pageNumber,
@@ -59,9 +59,9 @@ namespace API.Services.ORM
                     Id = ct.Id,
                     Title = ct.Title,
                     Code = ct.Code,
-                    Is_Active = ct.Is_Active
+                    IsActive = ct.IsActive
                 },
-                orderBy: ct => ct.Title
+                orderBy: ct => ct.Code
             );
         }
 
@@ -70,7 +70,7 @@ namespace API.Services.ORM
             var contractType = await _context.ContractTypes.FirstOrDefaultAsync(b => b.Id == id);
             if (contractType != null)
             {
-                contractType.Is_Active = false;
+                contractType.IsActive = false;
                 await _context.SaveChangesAsync();
             }
         }

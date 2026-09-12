@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using API.Services.ORM;
 using API.Helpers;
+using API.Services.ORM.Master_Data;
 
 namespace API
 {
@@ -62,6 +63,10 @@ namespace API
             builder.Services.AddScoped<NonCommercialService>();
             builder.Services.AddScoped<RoleService>();
             builder.Services.AddScoped<ContractTypeService>();
+            builder.Services.AddScoped<VendorService>();
+            builder.Services.AddScoped<UserProcDeptService>();
+            builder.Services.AddScoped<GeneralLedgerService>();
+            builder.Services.AddScoped<MaterialAnaplanService>();
 
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

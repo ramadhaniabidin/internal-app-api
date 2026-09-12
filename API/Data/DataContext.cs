@@ -1,4 +1,5 @@
 ﻿using API.Model;
+using API.Model.Master_Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -14,5 +15,9 @@ namespace API.Data
         public DbSet<StatusModel> Statuses => Set<StatusModel>();
         public DbSet<RoleModel> Roles => Set<RoleModel>();
         public DbSet<ContractTypeModel> ContractTypes => Set<ContractTypeModel>();
+        public DbSet<VendorNonCommercialsModel> VendorNonCommercials => Set<VendorNonCommercialsModel>();
+        public DbSet<UserProcurementDepartmentsModel> UserProcurementDepartments => Set<UserProcurementDepartmentsModel>();
+        public DbSet<GeneralLedgers> GeneralLedgers => Set<GeneralLedgers>();
+        public DbSet<MaterialAnaplan> MaterialAnaplans => Set<MaterialAnaplan>();
     }
 }

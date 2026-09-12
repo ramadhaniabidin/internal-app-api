@@ -37,7 +37,7 @@ namespace API.Helpers
                 PageSize = pageSize,
                 TotalCount = totalCount,
                 TotalPages = totalPages,
-                SearchTerm = searchExpression != null ? searchExpression.ToString() : null
+                SearchTerm = ""
             };
         }
     }

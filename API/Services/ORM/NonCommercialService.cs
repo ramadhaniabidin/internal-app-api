@@ -22,7 +22,7 @@ namespace API.Services.ORM
         {
             var branches = await branchService.GetAllBranchesAsync();
             var statuses = await statusService.GetAllStatusesAsync();
-            var procurementDepartments = await procurementDepartmentService.GetAllProcurementDepartmentsAsync();
+            var procurementDepartments = await procurementDepartmentService.GetAll();
             var modules = await moduleService.GetModulesByCategoryAsync(moduleCategoryId);
             return new NonCommercialListModel
             {
