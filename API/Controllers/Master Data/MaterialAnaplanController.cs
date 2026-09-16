@@ -37,6 +37,17 @@ namespace API.Controllers.Master_Data
             return Ok(result);
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var gl = await service.GetById(id);
+            if (gl == null)
+            {
+                return NotFound($"No material anaplan found with ID: {id}");
+            }
+            return Ok(gl);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(MaterialAnaplan model)
         {

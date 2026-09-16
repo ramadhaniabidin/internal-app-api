@@ -92,5 +92,10 @@ namespace API.Services.ORM.Master_Data
         {
             return await _context.MaterialAnaplans.FirstOrDefaultAsync(m => m.Code == code && m.Active);
         }
+
+        public async Task<MaterialAnaplan?> GetById(int id)
+        {
+            return await _context.MaterialAnaplans.FirstOrDefaultAsync(m => m.Id == id);
+        }
     }
 }
