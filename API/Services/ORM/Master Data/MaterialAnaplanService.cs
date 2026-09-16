@@ -88,9 +88,30 @@ namespace API.Services.ORM.Master_Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task Update(MaterialAnaplan model)
+        {
+            var existing = await _context.MaterialAnaplans.FirstOrDefaultAsync(m => m.Code == model.Code);
+            if (existing != null)
+            {
+                existing.UpdatedDate = DateTime.UtcNow;
+                existing.Description = model.Description;
+                existing.GeneralLedgerId = model.GeneralLedgerId;
+                existing.ProcurementDepartmentId = model.ProcurementDepartmentId;
+                existing.ValuationClass = model.ValuationClass;
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task<MaterialAnaplan?> GetByCode(string code)
         {
             return await _context.MaterialAnaplans.FirstOrDefaultAsync(m => m.Code == code && m.Active);
+        }
+
+        public async Task<MaterialAnaplanDiplay?> GetById(int id)
+        {
+            var query = GenerateQueryForAll();
+            var item = await query.FirstOrDefaultAsync(m => m.Id  == id);
+            return item;
         }
     }
 }
