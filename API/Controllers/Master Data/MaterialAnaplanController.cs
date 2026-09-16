@@ -89,5 +89,27 @@ namespace API.Controllers.Master_Data
             await service.Create(model);
             return Ok("Material Anaplan created successfully.");
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(MaterialAnaplan model)
+        {
+            if (string.IsNullOrEmpty(model.Code))
+            {
+                return BadRequest("Code is required");
+            }
+            if (string.IsNullOrEmpty(model.Description))
+            {
+                return BadRequest("Description is required");
+            }
+
+            var existing = await service.GetByCode(model.Code);
+            if (existing == null)
+            {
+                return NotFound($"There is no Material Anaplan found for Code \"{model.Code}\"");
+            }
+            model.Id = existing.Id;
+            await service.Update(model);
+            return NoContent();
+        }
     }
 }
