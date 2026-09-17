@@ -111,5 +111,12 @@ namespace API.Controllers.Master_Data
             await service.Update(model);
             return NoContent();
         }
+
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await service.Delete(id);
+            return NoContent();
+        }
     }
 }
