@@ -113,5 +113,16 @@ namespace API.Services.ORM.Master_Data
             var item = await query.FirstOrDefaultAsync(m => m.Id  == id);
             return item;
         }
+
+        public async Task Delete(int id)
+        {
+            var material = await _context.MaterialAnaplans.FirstOrDefaultAsync(m => m.Id == id);
+            if (material != null)
+            {
+                material.Active = false;
+                material.UpdatedDate = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
