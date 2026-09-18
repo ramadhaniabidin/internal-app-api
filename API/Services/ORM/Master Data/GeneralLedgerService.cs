@@ -55,7 +55,7 @@ namespace API.Services.ORM.Master_Data
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                TotalPages = totalPages,
+                TotalPages = totalPages <= 0 ? 1 : totalPages,
                 SearchTerm = keyword
             };
         }

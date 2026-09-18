@@ -21,10 +21,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetModules()
         {
             var modules = await service.GetAllModulesAsync();
-            if (modules == null || modules.Count == 0)
-            {
-                return NotFound("No modules found.");
-            }
             return Ok(modules);
 
         }
@@ -35,7 +31,7 @@ namespace API.Controllers
             var modules = await service.GetModulesByCategoryAsync(categoryId);
             if (modules == null || modules.Count == 0)
             {
-                return NotFound($"No modules found for category ID: {categoryId}");
+                return BadRequest($"No modules found for category ID: {categoryId}");
             }
             return Ok(modules);
 

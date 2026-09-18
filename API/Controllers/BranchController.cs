@@ -19,10 +19,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetBranches(int pageNumber = 1, int pageSize = 5, string search = "")
         {
             var branches = await _branchService.GetBranchesAsync(pageNumber, pageSize, search);
-            if (branches == null || branches.Items.Count == 0)
-            {
-                return NotFound("No branches found.");
-            }
             return Ok(branches);
         }
 
@@ -30,10 +26,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetBranchByCode(string code)
         {
             var branch = await _branchService.GetBranchByCodeAsync(code);
-            if (branch == null)
-            {
-                return NotFound($"No branch found with code: {code}");
-            }
             return Ok(branch);
         }
 
@@ -41,10 +33,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetBranchById(int id)
         {
             var branch = await _branchService.GetBranchByIdAsync(id);
-            if (branch == null)
-            {
-                return NotFound($"No branch found with ID: {id}");
-            }
             return Ok(branch);
         }
 
@@ -54,7 +42,7 @@ namespace API.Controllers
             var branch = await _branchService.GetBranchByIdAsync(id);
             if (branch == null)
             {
-                return NotFound($"Branch not found");
+                return BadRequest($"Branch not found");
             }
             await _branchService.DeleteBranchByIdAsync(id);
             return NoContent();
@@ -86,7 +74,7 @@ namespace API.Controllers
             var existingBranch = await _branchService.GetBranchByCodeAsync(branch.Code);
             if (existingBranch == null)
             {
-                return NotFound($"No branch found with code: {branch.Code}");
+                return BadRequest($"No branch found with code: {branch.Code}");
             }
             branch.Id = existingBranch.Id;
             await _branchService.UpdateBranchAsync(branch);

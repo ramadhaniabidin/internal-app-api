@@ -40,13 +40,15 @@ namespace API.Services.ORM.Master_Data
 
             Expression<Func<MaterialAnaplanDiplay, bool>>? searchExpression = null;
 
-            if (!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword) && !string.IsNullOrEmpty(searchBy))
             {
                 string searchColumn = searchBy ?? "";
                 searchExpression = searchColumn.ToLower() switch
                 {
                     "code" => gl => EF.Functions.ILike(gl.Code ?? "", $"%{keyword}%"),
                     "name" => gl => EF.Functions.ILike(gl.Description ?? "", $"%{keyword}%"),
+                    "procdept" => gl => EF.Functions.ILike(gl.ProcDeptName ?? "", $"%{keyword}%"),
+                    "gl" => gl => EF.Functions.ILike(gl.GeneralLedgerDescription ?? "", $"%{keyword}%"),
                     _ => gl => EF.Functions.ILike(gl.Description ?? "", $"%{keyword}%")
                 };
             }
@@ -76,7 +78,7 @@ namespace API.Services.ORM.Master_Data
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                TotalPages = totalPages,
+                TotalPages = totalPages <= 0 ? 1 : totalPages,
                 SearchTerm = keyword
             };
         }

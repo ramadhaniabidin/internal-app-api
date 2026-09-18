@@ -30,10 +30,6 @@ namespace API.Controllers.Master_Data
         public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, string? searchBy = "", string? keyword = "")
         {
             var result = await service.GetAll(pageNumber, pageSize, searchBy, keyword);
-            if (result == null || !result.Items.Any())
-            {
-                return NotFound("No material anaplan found.");
-            }
             return Ok(result);
         }
 
@@ -41,10 +37,6 @@ namespace API.Controllers.Master_Data
         public async Task<IActionResult> GetById(int id)
         {
             var gl = await service.GetById(id);
-            if (gl == null)
-            {
-                return NotFound($"No material anaplan found with ID: {id}");
-            }
             return Ok(gl);
         }
 
@@ -105,7 +97,7 @@ namespace API.Controllers.Master_Data
             var existing = await service.GetByCode(model.Code);
             if (existing == null)
             {
-                return NotFound($"There is no Material Anaplan found for Code \"{model.Code}\"");
+                return BadRequest($"There is no Material Anaplan found for Code \"{model.Code}\"");
             }
             model.Id = existing.Id;
             await service.Update(model);
