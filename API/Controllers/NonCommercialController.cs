@@ -34,10 +34,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetNonCommercials()
         {
             var result = await service.GetNonCommercialDataAsync();
-            if (result == null)
-            {
-                return NotFound("No non-commercial items found.");
-            }
             return Ok(result);
         }
 

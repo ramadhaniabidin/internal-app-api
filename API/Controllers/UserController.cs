@@ -20,7 +20,7 @@ namespace API.Controllers
             var result = await userService.GetPagedUserAsync(pageNumber, pageSize, search);
             if (result == null || result.Items.Count == 0)
             {
-                return NotFound("No users found.");
+                return BadRequest("No users found.");
             }
             return Ok(result);
         }

@@ -20,9 +20,9 @@ namespace API.Controllers
         public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 10, string? searchBy = "", string? keyword = "")
         {
             var result = await service.GetAll(pageNumber, pageSize, searchBy, keyword);
-            if (result == null || !result.Items.Any())
+            if (result == null || result.Items.Count == 0)
             {
-                return NotFound("No user procurement department found.");
+                return BadRequest("No user procurement department found.");
             }
             return Ok(result);
         }

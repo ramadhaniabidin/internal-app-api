@@ -22,10 +22,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllRoles(int pageNumber = 1, int pageSize = 10, string? search = "")
         {
             var roles = await _roleService.GetPagedRoleAsync(pageNumber, pageSize, search);
-            if (roles == null || roles.Items.Count == 0)
-            {
-                return NotFound("No Roles found.");
-            }
             return Ok(roles);
         }
 
@@ -35,7 +31,7 @@ namespace API.Controllers
             var existingRole = await _roleService.GetRoleByIdAsync(role.Id);
             if (existingRole == null)
             {
-                return NotFound("Role not found");
+                return BadRequest("Role not found");
             }
             await _roleService.UpdateRoleAsync(role);
             return NoContent();

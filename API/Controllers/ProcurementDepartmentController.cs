@@ -19,10 +19,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetProcurementDepartments(int pageNumber = 1, int pageSize = 10, string? searchBy = "", string? keyword = "")
         {
             var result = await service.GetPagedData(pageNumber, pageSize, searchBy, keyword);
-            if (result == null || result.Items.Count == 0)
-            {
-                return NotFound("No procurement departments found.");
-            }
             return Ok(result);
         }
 
@@ -32,7 +28,7 @@ namespace API.Controllers
             var contractType = await service.GetById(id);
             if (contractType == null)
             {
-                return NotFound($"No procurement department found with ID: {id}");
+                return BadRequest($"No procurement department found with ID: {id}");
             }
             return Ok(contractType);
         }
@@ -43,7 +39,7 @@ namespace API.Controllers
             var procDept = await service.GetByCode(code);
             if (procDept == null)
             {
-                return NotFound($"No procurement department found with code: {code}");
+                return BadRequest($"No procurement department found with code: {code}");
             }
             return Ok(procDept);
         }
@@ -74,7 +70,7 @@ namespace API.Controllers
             var procDept = await service.GetByCode(model.Code);
             if (procDept == null)
             {
-                return NotFound($"No contract type found with code: {model.Code}");
+                return BadRequest($"No contract type found with code: {model.Code}");
             }
             model.Id = procDept.Id;
             await service.Update(model);
@@ -88,7 +84,7 @@ namespace API.Controllers
             var contractType = await service.GetById(id);
             if (contractType == null)
             {
-                return NotFound($"Procurement Department not found");
+                return BadRequest($"Procurement Department not found");
             }
             await service.Delete(id);
             return NoContent();

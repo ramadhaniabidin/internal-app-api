@@ -17,10 +17,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetStatuses()
         {
             var statuses = await service.GetAllStatusesAsync();
-            if (statuses == null || statuses.Count == 0)
-            {
-                return NotFound("No statuses found.");
-            }
             return Ok(statuses);
         }
     }

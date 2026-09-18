@@ -96,7 +96,7 @@ namespace API.Services.ORM
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalCount = totalCount,
-                TotalPages = totalPages,
+                TotalPages = totalPages <= 0 ? 1 : totalPages,
                 SearchTerm = ""
             };
         }

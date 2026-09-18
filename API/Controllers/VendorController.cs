@@ -19,10 +19,6 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllVendors(int pageNumber = 1, int pageSize = 10, string? searchBy = "", string? keyword = "")
         {
             var result = await service.GetVendorsPages(pageNumber, pageSize, searchBy, keyword);
-            if (result == null || !result.Items.Any())
-            {
-                return NotFound("No vendors found.");
-            }
             return Ok(result);
         }
     }
