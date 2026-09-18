@@ -40,7 +40,7 @@ namespace API.Services.ORM.Master_Data
 
             Expression<Func<MaterialAnaplanDiplay, bool>>? searchExpression = null;
 
-            if (!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword) && !string.IsNullOrEmpty(searchBy))
             {
                 string searchColumn = searchBy ?? "";
                 searchExpression = searchColumn.ToLower() switch
