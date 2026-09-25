@@ -45,7 +45,7 @@ namespace API.Services.ORM
 
             if (!string.IsNullOrWhiteSpace(searchBy) && !string.IsNullOrWhiteSpace(keyword))
             {
-                var columns = searchBy.Split(';',StringSplitOptions.TrimEntries);
+                var columns = searchBy.Split(';', StringSplitOptions.TrimEntries);
                 var values = keyword.Split(';', StringSplitOptions.TrimEntries);
                 int filterCount = Math.Min(columns.Length, values.Length);
 
@@ -55,9 +55,11 @@ namespace API.Services.ORM
                     string val = values[i];
                     query = col switch
                     {
-                        "procurement department" => query.Where(v => EF.Functions.ILike(v.ProcDeptName ?? "", $"%{val}%")),
+                        "procurement department" => query.Where(v => EF.Functions.ILike(v.ProcDeptCode ?? "", $"%{val}%") || EF.Functions.ILike(v.ProcDeptName ?? "", $"%{val}%")),
                         "branch" => query.Where(v => EF.Functions.ILike(v.BranchName ?? "", $"%{val}%")),
                         "email" => query.Where(v => EF.Functions.ILike(v.UserEmail ?? "", $"%{val}%")),
+                        "useraccount" => query.Where(v => EF.Functions.ILike(v.UserAccount ?? "", $"%{val}%")),
+                        "userfullname" => query.Where(v => EF.Functions.ILike(v.UserFullName ?? "", $"%{val}%")),
                         _ => query
                     };
                 }
@@ -96,7 +98,7 @@ namespace API.Services.ORM
         public async Task<UserProcDeptDisplay?> GetExisting(UserProcurementDepartmentsModel model)
         {
             var query = GenerateQueryForGetAll();
-            var existing = await query.Where(q => q.BranchId == model.UserId && q.BranchId == model.BranchId && q.ProcurementDepartmentId == model.ProcurementDepartmentId)
+            var existing = await query.Where(q => q.BranchId == model.BranchId && q.BranchId == model.BranchId && q.ProcurementDepartmentId == model.ProcurementDepartmentId)
                 .FirstOrDefaultAsync();
             return existing;
         }
