@@ -89,6 +89,12 @@ namespace API
 
             app.MapControllers();
 
+            using(var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+                dbContext.Database.Migrate();
+            }
+
             app.Run();
         }
     }
