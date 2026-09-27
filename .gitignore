@@ -362,9 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /API/appsettings.json
-/API/deployment.yml
-/API/api-manifest.yml
-/API/cluster-issuer.yml
-/API/ingress-manifest.yml
-/API/postgres-manifest.yml
 
