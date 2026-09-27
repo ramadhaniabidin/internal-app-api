@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .API/Dockerfile
+          file: API/Dockerfile
           platforms: linux/amd64
           push: true
           tags: myramadhani/procurement-api:v1-vps-cloud
