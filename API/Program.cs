@@ -1,14 +1,15 @@
 using API.Data;
+using API.Helpers;
+using API.Services.ORM;
+using API.Services.ORM.Master_Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using API.Services.ORM;
-using API.Helpers;
-using API.Services.ORM.Master_Data;
 
 namespace API
 {
@@ -23,9 +24,10 @@ namespace API
             {
                 options.AddPolicy("MyMvcAppPolicy", policy =>
                 {
-                    policy.WithOrigins("http://localhost:8090") // Allow your MVC app
+                    policy.WithOrigins("http://localhost:8090", "https://procurement-app.my.id") // Allow your MVC app
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                 });
             });
 
@@ -53,7 +55,9 @@ namespace API
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
             builder.Services.AddDbContext<DataContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DockerPostgresConnection")));
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DockerPostgresConnection"));
+            });
             builder.Services.AddScoped<BranchService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<ProcurementDepartmentService>();
@@ -80,21 +84,13 @@ namespace API
                 app.MapOpenApi();
             }
 
-
             app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseCors("MyMvcAppPolicy");
-
+            app.UseAuthorization();
             app.UseAuthorization();
 
-
             app.MapControllers();
-
-            using(var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-                dbContext.Database.Migrate();
-            }
-
             app.Run();
         }
     }
