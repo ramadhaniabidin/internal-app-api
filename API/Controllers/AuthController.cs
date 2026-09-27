@@ -57,6 +57,13 @@ namespace API.Controllers
         public async Task<IActionResult> Token()
         {
             string username = _config["AppSettings:APIUsername"] ?? "";
+            string password = _config["AppSettings:APIPassword"] ?? "";
+            var user = await userService.GetByUsername(username);
+            if (user == null || !PasswordHelper.Verify(user.Password, password))
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]!);
 
