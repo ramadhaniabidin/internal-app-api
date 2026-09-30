@@ -52,7 +52,7 @@ namespace API.Services.ORM
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalPages = totalPage,
-                SearchTerm = "Test perubahan"
+                SearchTerm = search
             };
         }
 
