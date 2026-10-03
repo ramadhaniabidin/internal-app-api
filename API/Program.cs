@@ -24,7 +24,7 @@ namespace API
             {
                 options.AddPolicy("MyMvcAppPolicy", policy =>
                 {
-                    policy.WithOrigins("http://localhost:8090", "https://procurement-app.my.id") // Allow your MVC app
+                    policy.WithOrigins("http://localhost:8090", "https://procurement-app.my.id", "http://localhost:3000") // Allow your MVC app
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
